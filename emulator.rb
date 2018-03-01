@@ -1,6 +1,6 @@
 $debug=true
 $pfdebug=true
-$fdebug=false
+$fdebug=true
 $mname="the initialization code"
 $arg=[]
 $local=[]
@@ -214,19 +214,19 @@ end
 prog=<<-END
 # Memory class
 
-function Memory.alloc 0
+function Memory.alloc 1
   push static 0
-  pop temp 0
+  pop local 0
   push static 0
   push argument 0
   add
   pop static 0
-  push temp 0
+  push local 0
 return
 
 # Array class
 
-function x[y]=z 0
+function Array.set 0
   push argument 0
   push argument 1
   add
@@ -235,7 +235,7 @@ function x[y]=z 0
   pop this 0
 return
 
-function x[y] 0
+function Array.get 0
   push argument 0
   push argument 1
   add
@@ -285,7 +285,7 @@ return
 
 # Main class
 function Main.main 1
-  # Set t=Test.new
+  # t=Test.new
   call Test.new 0
   pop local 0
   # t.var=10
@@ -311,4 +311,14 @@ END
 boundtest=<<-END
 pop pointer 2
 END
-runprog(prog)
+
+testing=<<-END
+function main 2
+push constant 10
+pop local 0
+push constant 10
+pop local 1
+return
+call main 0
+END
+runprog(testing)
