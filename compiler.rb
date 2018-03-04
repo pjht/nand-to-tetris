@@ -41,7 +41,7 @@ def push(obj)
     $outfile.puts "push #{segment} #{index}"
   elsif obj.class == String
     if obj.is_integer?
-      $outfile.puts "push constant #{obj.to_i}"
+      $outfile.puts "push constant #{obj}"
     elsif is_var(obj.to_sym)
       index,segment=get_index(obj.to_sym)
       $outfile.puts "push #{segment} #{index}"
@@ -148,15 +148,15 @@ def phase_two
             $outfile.puts "call Main.#{parsed_line[1]} #{nargs}"
           else
             if line[1].include? "+"
-              operand=line[1].split("+")
+              operands=line[1].split("+")
               op="add"
             end
             if line[1].include? "-"
-              operand=line[1].split("-")
+              operands=line[1].split("-")
               op="sub"
             end
-            push(operand[0])
-            push(operand[1])
+            push(operands[0])
+            push(operands[1])
             $outfile.puts(op)
           end
         end
@@ -175,7 +175,7 @@ def phase_two
       push(0)
     end
     $outfile.puts "return"
-    $outfile.puts(" ")
+    $outfile.puts("")
   end
 end
 
@@ -185,15 +185,16 @@ def write_init
   sysfile.puts("call Main.main 0")
   sysfile.puts("label halt")
   sysfile.puts("goto halt")
-  sysfile.puts(" ")
+  sysfile.puts("")
 end
 
 if !File.exists? "vmprog"
   Dir.mkdir("vmprog")
+  Dir.chdir("vmprog")
   write_init()
+else
+  Dir.chdir("vmprog")
 end
-
-Dir.chdir("vmprog")
 
 $outfile=File.new("Main.vm","w")
 

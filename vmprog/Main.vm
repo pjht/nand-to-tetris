@@ -10,7 +10,7 @@ call Main.testfunc 1
 pop local 2
 push constant 0
 return
- 
+
 function Main.testfunc 1
 push argument 0
 push constant 7
@@ -18,4 +18,4 @@ sub
 pop local 0
 push local 0
 return
- 
+
